@@ -55,11 +55,15 @@ class DefaultDragAnimator : ItemDragAnimator {
         return createDragScaleAnimator(view, 1f)
     }
 
-    private fun createDragScaleAnimator(view: View, targetScale: Float): ValueAnimator {
+    internal fun createDragScaleAnimator(
+            view: View,
+            targetScale: Float,
+            animDuration: Long = SCALE_ANIM_DURATION
+    ): ValueAnimator {
         return ValueAnimator.ofFloat(view.scaleX, targetScale)
             .apply {
                 interpolator = DecelerateInterpolator()
-                duration = SCALE_ANIM_DURATION
+                duration = animDuration
                 setTarget(view)
                 addUpdateListener {
                     view.apply {
@@ -97,15 +101,16 @@ class DefaultDragAnimator : ItemDragAnimator {
         }
     }
 
-    private fun createRotationAnimator(
+    internal fun createRotationAnimator(
         view: View,
         targetRotation: Float,
-        startRotation: Float = view.rotation
+        startRotation: Float = view.rotation,
+        animDuration: Long = SHAKE_ANIM_DURATION
     ): ValueAnimator {
         return ValueAnimator.ofFloat(startRotation, targetRotation)
             .apply {
                 interpolator = AccelerateDecelerateInterpolator()
-                duration = SHAKE_ANIM_DURATION
+                duration = animDuration
                 setTarget(view)
                 addUpdateListener {
                     view.apply {
