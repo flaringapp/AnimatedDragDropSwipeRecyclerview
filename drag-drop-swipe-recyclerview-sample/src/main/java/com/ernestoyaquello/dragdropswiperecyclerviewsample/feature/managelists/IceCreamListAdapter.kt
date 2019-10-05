@@ -3,10 +3,13 @@ package com.ernestoyaquello.dragdropswiperecyclerviewsample.feature.managelists
 import android.content.res.ColorStateList
 import android.graphics.Canvas
 import android.graphics.Color
-import androidx.core.widget.ImageViewCompat
-import androidx.appcompat.widget.AppCompatImageView
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.LayoutRes
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.widget.ImageViewCompat
 import com.ernestoyaquello.dragdropswiperecyclerview.DragDropSwipeAdapter
 import com.ernestoyaquello.dragdropswiperecyclerviewsample.R
 import com.ernestoyaquello.dragdropswiperecyclerviewsample.data.model.IceCream
@@ -15,8 +18,10 @@ import com.ernestoyaquello.dragdropswiperecyclerviewsample.util.Logger
 /**
  * Adapter for a list of ice creams.
  */
-class IceCreamListAdapter(dataSet: List<IceCream> = emptyList())
-    : DragDropSwipeAdapter<IceCream, IceCreamListAdapter.ViewHolder>(dataSet) {
+class IceCreamListAdapter(
+        @LayoutRes private val layoutId: Int,
+        dataSet: List<IceCream> = emptyList()
+) : DragDropSwipeAdapter<IceCream, IceCreamListAdapter.ViewHolder>(dataSet) {
 
     class ViewHolder(iceCreamLayout: View) : DragDropSwipeAdapter.ViewHolder(iceCreamLayout) {
         val iceCreamNameView: TextView = itemView.findViewById(R.id.ice_cream_name)
@@ -26,8 +31,11 @@ class IceCreamListAdapter(dataSet: List<IceCream> = emptyList())
         val iceCreamPhotoFilter: View? = itemView.findViewById(R.id.ice_cream_photo_filter)
     }
 
-    override fun getViewHolder(itemView: View): ViewHolder {
-        return ViewHolder(itemView)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(
+                LayoutInflater.from(parent.context)
+                        .inflate(layoutId, parent, false)
+        )
     }
 
     override fun onBindViewHolder(item: IceCream, viewHolder: ViewHolder, position: Int) {

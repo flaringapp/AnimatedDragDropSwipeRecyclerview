@@ -15,6 +15,12 @@ class VerticalListFragment : BaseListFragment() {
     override val fragmentLayoutId = R.layout.fragment_vertical_list
     override val optionsMenuId = R.menu.fragment_vertical_list_options
 
+    override fun provideLayoutItemId(): Int {
+        return if (currentListFragmentConfig.isUsingStandardItemLayout)
+            R.layout.list_item_vertical_list
+        else R.layout.list_item_vertical_list_cardview
+    }
+
     override fun setupListLayoutManager(list: DragDropSwipeRecyclerView) {
         // Set vertical linear layout manager
         list.layoutManager = LinearLayoutManager(activity)
@@ -30,23 +36,17 @@ class VerticalListFragment : BaseListFragment() {
 
     override fun setupListItemLayout(list: DragDropSwipeRecyclerView) {
         if (currentListFragmentConfig.isUsingStandardItemLayout)
-            setStandardItemLayoutAndDivider(list)
+            setStandardDivider(list)
         else
-            setCardViewItemLayoutAndNoDivider(list)
+            setCardViewNoDivider(list)
     }
 
-    private fun setStandardItemLayoutAndDivider(list: DragDropSwipeRecyclerView) {
-        // In XML: app:item_layout="@layout/list_item_vertical_list"
-        list.itemLayoutId = R.layout.list_item_vertical_list
-
+    private fun setStandardDivider(list: DragDropSwipeRecyclerView) {
         // In XML: app:divider="@drawable/divider_vertical_list"
         list.dividerDrawableId = R.drawable.divider_vertical_list
     }
 
-    private fun setCardViewItemLayoutAndNoDivider(list: DragDropSwipeRecyclerView) {
-        // In XML: app:item_layout="@layout/list_item_vertical_list_cardview"
-        list.itemLayoutId = R.layout.list_item_vertical_list_cardview
-
+    private fun setCardViewNoDivider(list: DragDropSwipeRecyclerView) {
         // In XML: app:divider="@null"
         list.dividerDrawableId = null
     }

@@ -18,6 +18,11 @@ class GridListFragment : BaseListFragment() {
     override val fragmentLayoutId = R.layout.fragment_grid_list
     override val optionsMenuId = R.menu.fragment_grid_list_options
 
+    override fun provideLayoutItemId(): Int {
+        return if (currentListFragmentConfig.isUsingStandardItemLayout) R.layout.list_item_grid_list
+        else R.layout.list_item_grid_list_cardview
+    }
+
     override fun setupListLayoutManager(list: DragDropSwipeRecyclerView) {
         // Set grid linear layout manager
         list.layoutManager = GridLayoutManager(activity, numberOfColumns)
@@ -35,25 +40,19 @@ class GridListFragment : BaseListFragment() {
 
     override fun setupListItemLayout(list: DragDropSwipeRecyclerView) {
         if (currentListFragmentConfig.isUsingStandardItemLayout)
-            setStandardItemLayoutAndDivider(list)
+            setStandardDivider(list)
         else
-            setCardViewItemLayoutAndNoDivider(list)
+            setCardViewNoDivider(list)
 
         setAnimateDragging(list)
     }
 
-    private fun setStandardItemLayoutAndDivider(list: DragDropSwipeRecyclerView) {
-        // In XML: app:item_layout="@layout/list_item_grid_list"
-        list.itemLayoutId = R.layout.list_item_grid_list
-
+    private fun setStandardDivider(list: DragDropSwipeRecyclerView) {
         // In XML: app:divider="@drawable/divider_grid_list"
         list.dividerDrawableId = R.drawable.divider_grid_list
     }
 
-    private fun setCardViewItemLayoutAndNoDivider(list: DragDropSwipeRecyclerView) {
-        // In XML: app:item_layout="@layout/list_item_grid_list_cardview"
-        list.itemLayoutId = R.layout.list_item_grid_list_cardview
-
+    private fun setCardViewNoDivider(list: DragDropSwipeRecyclerView) {
         // In XML: app:divider="@null"
         list.dividerDrawableId = null
     }

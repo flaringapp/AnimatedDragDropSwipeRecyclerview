@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.ProgressBar
+import androidx.annotation.LayoutRes
 import com.ernestoyaquello.dragdropswiperecyclerview.DragDropSwipeRecyclerView
 import com.ernestoyaquello.dragdropswiperecyclerview.listener.OnItemDragListener
 import com.ernestoyaquello.dragdropswiperecyclerview.listener.OnItemSwipeListener
@@ -29,7 +30,7 @@ import com.google.android.material.snackbar.Snackbar
  */
 abstract class BaseListFragment : Fragment() {
 
-    private val adapter = IceCreamListAdapter()
+    private val adapter = IceCreamListAdapter(provideLayoutItemId())
     private val repository = IceCreamRepository.getInstance()
 
     private lateinit var rootView: ViewGroup
@@ -128,6 +129,9 @@ abstract class BaseListFragment : Fragment() {
 
         return rootView
     }
+
+    @LayoutRes
+    protected abstract fun provideLayoutItemId(): Int
 
     protected abstract fun setupListLayoutManager(list: DragDropSwipeRecyclerView)
 

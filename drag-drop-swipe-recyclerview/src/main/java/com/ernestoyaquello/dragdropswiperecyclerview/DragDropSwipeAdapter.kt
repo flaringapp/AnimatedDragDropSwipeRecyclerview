@@ -62,13 +62,6 @@ abstract class DragDropSwipeAdapter<T, U : DragDropSwipeAdapter.ViewHolder>(
     }
 
     /**
-     * Called automatically to get an instance of the adapter's view holder.
-     *
-     * @param itemView The item layout to be used to create the view holder.
-     */
-    protected abstract fun getViewHolder(itemView: View): U
-
-    /**
      * Called automatically to get the data to display at the specified position. This method
      * should update the contents of the view holder's views to reflect the item at the given
      * position.
@@ -345,16 +338,6 @@ abstract class DragDropSwipeAdapter<T, U : DragDropSwipeAdapter.ViewHolder>(
     }
 
     override fun getItemCount() = mutableDataSet.size
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): U {
-        val itemLayoutId = recyclerView?.itemLayoutId ?: 0
-        if (itemLayoutId != 0) {
-            val itemLayout = LayoutInflater.from(parent.context)
-                    .inflate(itemLayoutId, parent, false) as View
-            return getViewHolder(itemLayout)
-        } else throw NoSuchFieldException("Unless your adapter implements onCreateViewHolder(), " +
-                "the attribute item_layout must be provided for the DragDropSwipeRecyclerView.")
-    }
 
     override fun onBindViewHolder(holder: U, position: Int) {
         val item = mutableDataSet[position]
