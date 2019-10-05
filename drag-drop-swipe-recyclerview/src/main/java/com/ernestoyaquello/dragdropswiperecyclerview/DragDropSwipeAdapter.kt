@@ -4,6 +4,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Handler
 import android.view.*
+import androidx.annotation.CallSuper
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
@@ -339,6 +340,7 @@ abstract class DragDropSwipeAdapter<T, U : DragDropSwipeAdapter.ViewHolder>(
 
     override fun getItemCount() = mutableDataSet.size
 
+    @CallSuper
     override fun onBindViewHolder(holder: U, position: Int) {
         val item = mutableDataSet[position]
 
@@ -378,6 +380,7 @@ abstract class DragDropSwipeAdapter<T, U : DragDropSwipeAdapter.ViewHolder>(
         onBindViewHolder(item, holder, position)
     }
 
+    @CallSuper
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
 
@@ -388,6 +391,7 @@ abstract class DragDropSwipeAdapter<T, U : DragDropSwipeAdapter.ViewHolder>(
         } else throw TypeCastException("The recycler view must be an extension of DragDropSwipeRecyclerView.")
     }
 
+    @CallSuper
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
 
