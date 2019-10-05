@@ -6,18 +6,13 @@ Highly customizable Android library written in Kotlin that uses AndroidX and ext
 
 ![Drag & drop and swipe recycler view; demo with grid list](https://raw.githubusercontent.com/ernestoyaquello/DragDropSwipeRecyclerview/master/readme/drag-drop-swipe-list-demo2.gif)
 
-## Support this library
-The creation (and maintenance) of this library requires time and effort. If you find it useful and want to support it, please use the link below:
-
-[![Buy me a coffee!](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/ernestoyaquello)
-
 ## How to use it
 ### 1. Reference the library
 Add the library to your project via Gradle:
 
 ```
 dependencies {
-    implementation 'com.ernestoyaquello.dragdropswiperecyclerview:drag-drop-swipe-recyclerview:0.4.1'
+    implementation 'com.github.flaringapp:DragDropSwipeRecyclerview:v0.4.1'
 }
 ```
 
@@ -37,15 +32,12 @@ Place the `DragDropSwipeRecyclerview` inside your layout using XML:
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:item_layout="@layout/list_item_layout"
         app:divider="@drawable/list_divider"/>
 
 </FrameLayout>
 ```
 
-As you can see in the code above, **we specify the list item layout through the attribute `item_layout`**. This way, the library will take care of inflating the item layout automatically, so you won't have to do it manually in the adapter.
-
-In addition, in this example you can also see that the optional attribute `divider` is being used to specify the drawable that will be displayed between list items (for more information about available attributes, see [**Customization**](#customization)).
+You can see that the optional attribute `divider` is being used to specify the drawable that will be displayed between list items (for more information about available attributes, see [**Customization**](#customization)).
 
 > #### Referenced resource files
 > Just in case they are of any help, these are the example resource files referenced in the code above:
@@ -107,7 +99,7 @@ class MyAdapter(dataSet: List<String> = emptyList())
         val dragIcon: ImageView = itemView.findViewById(R.id.drag_icon)
     }
 
-    override fun getViewHolder(itemLayout: View) = MyAdapter.ViewHolder(itemLayout)
+    override fun onCreateViewHolder ...
 
     override fun onBindViewHolder(item: String, viewHolder: MyAdapter.ViewHolder, position: Int) {
         // Here we update the contents of the view holder's views to reflect the item's data
