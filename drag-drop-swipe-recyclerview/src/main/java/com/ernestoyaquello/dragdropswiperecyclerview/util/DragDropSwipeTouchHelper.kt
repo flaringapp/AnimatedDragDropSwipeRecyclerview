@@ -1,6 +1,8 @@
 package com.ernestoyaquello.dragdropswiperecyclerview.util
 
 import android.graphics.Canvas
+import android.graphics.RectF
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.ernestoyaquello.dragdropswiperecyclerview.DragDropSwipeAdapter
@@ -151,6 +153,21 @@ internal class DragDropSwipeTouchHelper(
         itemSwipeListener.onItemSwiped(position, swipeDirection)
     }
 
+    override fun chooseDropTarget(
+            selected: RecyclerView.ViewHolder,
+            dropTargets: MutableList<RecyclerView.ViewHolder>,
+            curX: Int,
+            curY: Int
+    ): RecyclerView.ViewHolder? {
+        for (target in dropTargets) {
+            if (selected.itemView.isInBounds(target.itemView)) {
+                return target
+            }
+        }
+
+        return null
+    }
+
     override fun onChildDraw(
             c: Canvas,
             recyclerView: RecyclerView,
@@ -271,4 +288,15 @@ internal class DragDropSwipeTouchHelper(
         itemStateChangeListener.onStateChanged(
                 OnItemStateChangeListener.StateChangeType.SWIPE_FINISHED, viewHolder)
     }
+}
+//Based on view's center
+private fun View.isInBounds(other: View): Boolean {
+    val rect = RectF(
+            other.x,
+            other.y,
+            other.x + other.width,
+            other.y + other.height
+    )
+
+    return rect.contains(x + width / 2, y + height / 2)
 }
