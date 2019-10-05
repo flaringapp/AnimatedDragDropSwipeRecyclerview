@@ -403,15 +403,30 @@ abstract class DragDropSwipeAdapter<T, U : DragDropSwipeAdapter.ViewHolder>(
 
     fun addItem(item: T) {
         mutableDataSet.add(item)
-        val position = mutableDataSet.indexOf(item)
 
-        notifyItemInserted(position)
+        notifyItemInserted(mutableDataSet.size - 1)
     }
 
     fun insertItem(position: Int, item: T) {
         mutableDataSet.add(position, item)
 
         notifyItemInserted(position)
+    }
+
+    fun addItems(items: List<T>) {
+        if (items.isEmpty()) return
+
+        mutableDataSet.addAll(items)
+
+        notifyItemRangeInserted(mutableDataSet.size - items.size, items.size)
+    }
+
+    fun addItems(items: List<T>, position: Int) {
+        if (items.isEmpty()) return
+
+        mutableDataSet.addAll(position, items)
+
+        notifyItemRangeInserted(mutableDataSet.size - position - items.size, items.size)
     }
 
     fun removeItem(position: Int) {
@@ -434,6 +449,15 @@ abstract class DragDropSwipeAdapter<T, U : DragDropSwipeAdapter.ViewHolder>(
             moveItem(previousPosition, newPosition)
         else
             insertItem(newPosition, item)
+    }
+
+    fun clear() {
+        val size = mutableDataSet.size
+        if (size == 0) return
+
+        mutableDataSet.clear()
+
+        notifyItemRangeRemoved(0, size)
     }
 
     private fun onListItemDragged(previousPosition: Int, newPosition: Int) {
