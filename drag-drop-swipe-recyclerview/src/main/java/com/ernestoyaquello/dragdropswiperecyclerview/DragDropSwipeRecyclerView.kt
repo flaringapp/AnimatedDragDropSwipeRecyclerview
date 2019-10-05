@@ -554,6 +554,11 @@ open class DragDropSwipeRecyclerView @JvmOverloads constructor(
         adapter?.swipeAndDragHelper?.dragAnimator = value
     }
 
+    /**
+     * Parameter indicating whether drag should start on long click
+     */
+    var longClickDrag: Boolean = false
+
     init {
         if (attrs != null) {
             val vars = context.theme.obtainStyledAttributes(
@@ -574,6 +579,7 @@ open class DragDropSwipeRecyclerView @JvmOverloads constructor(
                 behindSwipedItemLayoutId = vars.getResourceId(R.styleable.DragDropSwipeRecyclerView_behind_swiped_item_custom_layout, 0)
                 behindSwipedItemSecondaryLayoutId = vars.getResourceId(R.styleable.DragDropSwipeRecyclerView_behind_swiped_item_custom_layout_secondary, 0)
                 reduceItemAlphaOnSwiping = vars.getBoolean(R.styleable.DragDropSwipeRecyclerView_swiped_item_opacity_fades_on_swiping, false)
+                longClickDrag = vars.getBoolean(R.styleable.DragDropSwipeRecyclerView_drag_long_click, false)
             } finally {
                 vars.recycle()
             }
@@ -646,6 +652,7 @@ open class DragDropSwipeRecyclerView @JvmOverloads constructor(
             bundle.putString(ORIENTATION_NAME_KEY, orientation?.name)
             bundle.putInt(ORIENTATION_DRAG_FLAGS_KEY, orientation?.dragFlagsValue ?: 0)
             bundle.putInt(ORIENTATION_SWIPE_FLAGS_KEY, orientation?.swipeFlagsValue ?: 0)
+            bundle.putBoolean(LONG_CLICK_DRAG_KEY, longClickDrag)
 
             return bundle
         }
@@ -679,6 +686,7 @@ open class DragDropSwipeRecyclerView @JvmOverloads constructor(
                 auxOrientation.restoreFlags(savedOrientationDragFlags, savedOrientationSwipeFlags)
                 orientation = auxOrientation
             }
+            longClickDrag = state.getBoolean(LONG_CLICK_DRAG_KEY, false)
         }
 
         super.onRestoreInstanceState(superState)
@@ -702,5 +710,6 @@ open class DragDropSwipeRecyclerView @JvmOverloads constructor(
         const val ORIENTATION_NAME_KEY = "orientation_name"
         const val ORIENTATION_DRAG_FLAGS_KEY = "orientation_drag_flags"
         const val ORIENTATION_SWIPE_FLAGS_KEY = "orientation_swipe_flags"
+        const val LONG_CLICK_DRAG_KEY = "long_click_drag"
     }
 }

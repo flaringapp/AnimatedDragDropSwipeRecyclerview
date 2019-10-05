@@ -2,10 +2,8 @@ package com.ernestoyaquello.dragdropswiperecyclerview
 
 import android.graphics.Canvas
 import android.graphics.Color
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.os.Handler
+import android.view.*
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
@@ -15,6 +13,8 @@ import com.ernestoyaquello.dragdropswiperecyclerview.listener.OnItemSwipeListene
 import com.ernestoyaquello.dragdropswiperecyclerview.util.DragDropSwipeTouchHelper
 import com.ernestoyaquello.dragdropswiperecyclerview.util.drawHorizontalDividers
 import com.ernestoyaquello.dragdropswiperecyclerview.util.drawVerticalDividers
+import kotlin.math.abs
+
 
 /**
  * Needs to be implemented by any adapter to be used within a DragDropSwipeRecyclerView.
@@ -55,14 +55,10 @@ abstract class DragDropSwipeAdapter<T, U : DragDropSwipeAdapter.ViewHolder>(
         internal var isBeingSwiped = false
 
         var behindSwipedItemLayout: View? = null
-            internal set(value) {
-                field = value
-            }
+            internal set
 
         var behindSwipedItemSecondaryLayout: View? = null
-            internal set(value) {
-                field = value
-            }
+            internal set
     }
 
     /**
@@ -371,31 +367,29 @@ abstract class DragDropSwipeAdapter<T, U : DragDropSwipeAdapter.ViewHolder>(
                 if (viewHolderPosition != NO_POSITION) {
                     val viewHolderItem = mutableDataSet[viewHolderPosition]
                     canBeDragged(viewHolderItem, holder, viewHolderPosition)
-                }
-                else false
+                } else false
             }
             canBeDroppedOver = holder.canBeDroppedOver ?: {
                 val viewHolderPosition = holder.adapterPosition
                 if (viewHolderPosition != NO_POSITION) {
                     val viewHolderItem = mutableDataSet[viewHolderPosition]
                     canBeDroppedOver(viewHolderItem, holder, viewHolderPosition)
-                }
-                else false
+                } else false
             }
             canBeSwiped = holder.canBeSwiped ?: {
                 val viewHolderPosition = holder.adapterPosition
                 if (viewHolderPosition != NO_POSITION) {
                     val viewHolderItem = mutableDataSet[viewHolderPosition]
                     canBeSwiped(viewHolderItem, holder, viewHolderPosition)
-                }
-                else false
+                } else false
             }
             itemView.alpha = 1f
             behindSwipedItemLayout = getBehindSwipedItemLayout(item, holder, position)
             behindSwipedItemSecondaryLayout = getBehindSwipedItemSecondaryLayout(item, holder, position)
         }
 
-        val viewToDrag = getViewToTouchToStartDraggingItem(item, holder, position) ?: holder.itemView
+        val viewToDrag = getViewToTouchToStartDraggingItem(item, holder, position)
+                ?: holder.itemView
         setItemDragAndDrop(viewToDrag, holder)
 
         onBindViewHolder(item, holder, position)
@@ -508,7 +502,7 @@ abstract class DragDropSwipeAdapter<T, U : DragDropSwipeAdapter.ViewHolder>(
                 // The behind-swiped-items layout was never inflated before or the
                 // layout ID has changed, so we inflate it
                 return recyclerView?.context?.let { context ->
-                     LayoutInflater
+                    LayoutInflater
                             .from(context)
                             .inflate(behindSwipedItemLayoutId, null, false)
                 }
@@ -806,9 +800,52 @@ abstract class DragDropSwipeAdapter<T, U : DragDropSwipeAdapter.ViewHolder>(
             view.setOnTouchListener(getDragAndDropTouchListener(holder))
 
     private fun getDragAndDropTouchListener(holder: U) =
-            View.OnTouchListener { _, event ->
-                if (holder.canBeDragged?.invoke() == true && event?.actionMasked == MotionEvent.ACTION_DOWN)
+            object : View.OnTouchListener {
+                val handler = Handler()
+                var waitingForAction = false
+
+                var longPressAction = Runnable {
                     itemTouchHelper.startDrag(holder)
-                false
+                    waitingForAction = false
+                }
+
+                var startTouchX = 0f
+                var startTouchY = 0f
+
+                override fun onTouch(view: View, event: MotionEvent): Boolean {
+                    if (event.action == MotionEvent.ACTION_DOWN) {
+                        if (holder.canBeDragged?.invoke() == true) {
+                            if (recyclerView?.longClickDrag == true) {
+                                waitingForAction = true
+                                startTouchX = event.x
+                                startTouchY = event.y
+                                handler.postDelayed(longPressAction, ViewConfiguration.getLongPressTimeout().toLong())
+                            } else {
+                                itemTouchHelper.startDrag(holder)
+                            }
+                        }
+                    } else if (event.action == MotionEvent.ACTION_MOVE && waitingForAction) {
+                        if (
+                                abs(event.x - startTouchX) > LONG_TOUCH_DELTA_X ||
+                                abs(event.y - startTouchY) > LONG_TOUCH_DELTA_Y
+                        ) {
+                            handler.removeCallbacks(longPressAction)
+                            waitingForAction = false
+                        }
+                    } else if (event.action == MotionEvent.ACTION_UP) {
+                        if (waitingForAction) {
+                            handler.removeCallbacks(longPressAction)
+                            waitingForAction = false
+                        } else {
+                            view.performClick()
+                        }
+                    }
+                    return true
+                }
             }
+
+    companion object {
+        private const val LONG_TOUCH_DELTA_X = 20
+        private const val LONG_TOUCH_DELTA_Y = 20
+    }
 }

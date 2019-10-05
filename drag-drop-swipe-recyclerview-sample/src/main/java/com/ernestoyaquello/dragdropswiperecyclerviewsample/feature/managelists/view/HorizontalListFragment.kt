@@ -52,6 +52,10 @@ class HorizontalListFragment : BaseListFragment() {
         list.dividerDrawableId = null
     }
 
+    override fun setupLayoutLongClickDrag(list: DragDropSwipeRecyclerView) {
+        list.longClickDrag = currentListFragmentConfig.isDragOnLongClick
+    }
+
     override fun setupLayoutBehindItemLayoutOnSwiping(list: DragDropSwipeRecyclerView) {
         // We set to null all the properties that can be used to display something behind swiped items
         // In XML: app:behind_swiped_item_bg_color="@null"

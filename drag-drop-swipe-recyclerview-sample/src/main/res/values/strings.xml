@@ -19,6 +19,8 @@
     <string name="action_not_restrict_dragging">Don\'t restrict dragging</string>
     <string name="action_animate_dragging">Animate dragging</string>
     <string name="action_not_animate_dragging">Don\'t animate dragging</string>
+    <string name="action_drag_on_long_click">Drag on long click</string>
+    <string name="action_drag_on_touch">Drag on touch</string>
     <string name="generic_delete">Delete</string>
     <string name="generic_archive">Archive</string>
 </resources>

@@ -122,6 +122,7 @@ abstract class BaseListFragment : Fragment() {
         setupListLayoutManager(list)
         setupListOrientation(list)
         setupListItemLayout(list)
+        setupLayoutLongClickDrag(list)
         setupLayoutBehindItemLayoutOnSwiping(list)
         setupFadeItemLayoutOnSwiping(list)
 
@@ -133,6 +134,8 @@ abstract class BaseListFragment : Fragment() {
     protected abstract fun setupListOrientation(list: DragDropSwipeRecyclerView)
 
     protected abstract fun setupListItemLayout(list: DragDropSwipeRecyclerView)
+
+    protected abstract fun setupLayoutLongClickDrag(list: DragDropSwipeRecyclerView)
 
     protected abstract fun setupLayoutBehindItemLayoutOnSwiping(list: DragDropSwipeRecyclerView)
 
@@ -151,6 +154,9 @@ abstract class BaseListFragment : Fragment() {
 
             R.id.change_drag_animations ->
                 currentListFragmentConfig.isUsingDragAnimations = !currentListFragmentConfig.isUsingDragAnimations
+
+            R.id.long_click_drag ->
+                currentListFragmentConfig.isDragOnLongClick = !currentListFragmentConfig.isDragOnLongClick
 
             R.id.enable_disable_drawing_behind ->
                 currentListFragmentConfig.isDrawingBehindSwipedItems = !currentListFragmentConfig.isDrawingBehindSwipedItems
@@ -209,6 +215,13 @@ abstract class BaseListFragment : Fragment() {
                                 R.string.action_not_animate_dragging
                             else
                                 R.string.action_animate_dragging)
+
+                R.id.long_click_drag ->
+                    menuItem.title = getString(
+                            if (currentListFragmentConfig.isDragOnLongClick)
+                                R.string.action_drag_on_touch
+                            else
+                                R.string.action_drag_on_long_click)
 
                 R.id.enable_disable_drawing_behind ->
                     menuItem.title = getString(

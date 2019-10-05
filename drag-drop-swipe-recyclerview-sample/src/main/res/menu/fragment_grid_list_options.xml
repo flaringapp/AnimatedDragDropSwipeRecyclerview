@@ -19,6 +19,11 @@
         app:showAsAction="never"/>
 
     <item
+        android:id="@+id/long_click_drag"
+        android:title="@string/action_drag_on_long_click"
+        app:showAsAction="never"/>
+
+    <item
         android:id="@+id/enable_disable_drawing_behind"
         android:title="@string/action_not_draw_behind_swiped_items"
         app:showAsAction="never"/>
