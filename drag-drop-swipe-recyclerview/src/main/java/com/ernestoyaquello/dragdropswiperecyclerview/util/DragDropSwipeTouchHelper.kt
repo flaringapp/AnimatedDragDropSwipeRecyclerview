@@ -7,6 +7,7 @@ import com.ernestoyaquello.dragdropswiperecyclerview.DragDropSwipeAdapter
 import com.ernestoyaquello.dragdropswiperecyclerview.DragDropSwipeRecyclerView
 import com.ernestoyaquello.dragdropswiperecyclerview.DragDropSwipeRecyclerView.ListOrientation
 import com.ernestoyaquello.dragdropswiperecyclerview.DragDropSwipeRecyclerView.ListOrientation.DirectionFlag
+import com.ernestoyaquello.dragdropswiperecyclerview.animator.ItemDragAnimator
 import com.ernestoyaquello.dragdropswiperecyclerview.listener.OnItemSwipeListener.SwipeDirection
 
 internal class DragDropSwipeTouchHelper(
@@ -70,6 +71,8 @@ internal class DragDropSwipeTouchHelper(
     }
 
     internal var orientation: ListOrientation? = null
+    internal var dragAnimator: ItemDragAnimator? = null
+
     private val mOrientation: ListOrientation
         get() {
             val currentOrientation = orientation
@@ -80,6 +83,9 @@ internal class DragDropSwipeTouchHelper(
 
     private var isDragging = false
     private var isSwiping = false
+
+    private var currentDraggingItem: RecyclerView.ViewHolder? = null
+
     private var initialItemPositionForOngoingDraggingEvent = -1
 
     override fun isLongPressDragEnabled() = false
@@ -178,8 +184,17 @@ internal class DragDropSwipeTouchHelper(
 
         if (viewHolder != null) {
             when (actionState) {
-                ItemTouchHelper.ACTION_STATE_DRAG -> onStartedDragging(viewHolder)
+                ItemTouchHelper.ACTION_STATE_DRAG -> {
+                    currentDraggingItem = viewHolder
+                    dragAnimator?.onDragStarted(viewHolder.itemView)
+                    onStartedDragging(viewHolder)
+                }
                 ItemTouchHelper.ACTION_STATE_SWIPE -> onStartedSwiping(viewHolder)
+            }
+        } else {
+            if (currentDraggingItem != null) {
+                dragAnimator?.onDragEnded(currentDraggingItem!!.itemView)
+                currentDraggingItem = null
             }
         }
     }

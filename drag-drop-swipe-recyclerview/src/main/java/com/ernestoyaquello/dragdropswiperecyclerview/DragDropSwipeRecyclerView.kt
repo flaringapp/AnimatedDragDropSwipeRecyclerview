@@ -15,6 +15,7 @@ import com.ernestoyaquello.dragdropswiperecyclerview.listener.OnItemDragListener
 import com.ernestoyaquello.dragdropswiperecyclerview.listener.OnItemSwipeListener
 import com.ernestoyaquello.dragdropswiperecyclerview.util.DragDropSwipeItemDecoration
 import android.os.Bundle
+import com.ernestoyaquello.dragdropswiperecyclerview.animator.ItemDragAnimator
 
 /**
  * Extension of RecyclerView that detects swipe, drag & drop and scrolling.
@@ -509,6 +510,7 @@ open class DragDropSwipeRecyclerView @JvmOverloads constructor(
                     value.setInternalDragListener(dragListener)
                     value.setInternalSwipeListener(swipeListener)
                     value.swipeAndDragHelper.orientation = orientation
+                    value.swipeAndDragHelper.dragAnimator = dragAnimator
 
                     super.setAdapter(value)
                 }
@@ -542,6 +544,15 @@ open class DragDropSwipeRecyclerView @JvmOverloads constructor(
                 adapter?.swipeAndDragHelper?.orientation = value
             }
         }
+
+    /**
+     * Animator for dragged items
+     */
+    var dragAnimator: ItemDragAnimator? = null
+    set(value) {
+        field = value
+        adapter?.swipeAndDragHelper?.dragAnimator = value
+    }
 
     init {
         if (attrs != null) {

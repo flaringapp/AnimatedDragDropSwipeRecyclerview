@@ -149,6 +149,9 @@ abstract class BaseListFragment : Fragment() {
             R.id.change_dragging_restrictions ->
                 currentListFragmentConfig.isRestrictingDraggingDirections = !currentListFragmentConfig.isRestrictingDraggingDirections
 
+            R.id.change_drag_animations ->
+                currentListFragmentConfig.isUsingDragAnimations = !currentListFragmentConfig.isUsingDragAnimations
+
             R.id.enable_disable_drawing_behind ->
                 currentListFragmentConfig.isDrawingBehindSwipedItems = !currentListFragmentConfig.isDrawingBehindSwipedItems
 
@@ -199,6 +202,13 @@ abstract class BaseListFragment : Fragment() {
                                 R.string.action_not_restrict_dragging
                             else
                                 R.string.action_restrict_dragging)
+
+                R.id.change_drag_animations ->
+                    menuItem.title = getString(
+                            if (currentListFragmentConfig.isUsingDragAnimations)
+                                R.string.action_not_animate_dragging
+                            else
+                                R.string.action_animate_dragging)
 
                 R.id.enable_disable_drawing_behind ->
                     menuItem.title = getString(

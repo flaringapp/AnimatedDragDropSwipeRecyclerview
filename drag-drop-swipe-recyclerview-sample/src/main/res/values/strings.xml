@@ -17,6 +17,8 @@
     <string name="action_not_reduce_alpha_on_swiping">Don\'t reduce alpha on swiping</string>
     <string name="action_restrict_dragging">Restrict dragging</string>
     <string name="action_not_restrict_dragging">Don\'t restrict dragging</string>
+    <string name="action_animate_dragging">Animate dragging</string>
+    <string name="action_not_animate_dragging">Don\'t animate dragging</string>
     <string name="generic_delete">Delete</string>
     <string name="generic_archive">Archive</string>
 </resources>

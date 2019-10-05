@@ -14,6 +14,11 @@
         app:showAsAction="never"/>
 
     <item
+        android:id="@+id/change_drag_animations"
+        android:title="@string/action_not_animate_dragging"
+        app:showAsAction="never"/>
+
+    <item
         android:id="@+id/enable_disable_drawing_behind"
         android:title="@string/action_not_draw_behind_swiped_items"
         app:showAsAction="never"/>

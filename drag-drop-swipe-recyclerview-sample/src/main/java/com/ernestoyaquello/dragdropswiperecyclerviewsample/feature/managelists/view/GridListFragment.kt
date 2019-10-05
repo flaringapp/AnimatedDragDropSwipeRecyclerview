@@ -3,6 +3,7 @@ package com.ernestoyaquello.dragdropswiperecyclerviewsample.feature.managelists.
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.ernestoyaquello.dragdropswiperecyclerview.DragDropSwipeRecyclerView
+import com.ernestoyaquello.dragdropswiperecyclerview.animator.DefaultDragAnimator
 import com.ernestoyaquello.dragdropswiperecyclerviewsample.R
 import com.ernestoyaquello.dragdropswiperecyclerviewsample.config.local.currentListFragmentConfig
 import com.ernestoyaquello.dragdropswiperecyclerviewsample.feature.managelists.view.base.BaseListFragment
@@ -37,6 +38,8 @@ class GridListFragment : BaseListFragment() {
             setStandardItemLayoutAndDivider(list)
         else
             setCardViewItemLayoutAndNoDivider(list)
+
+        setAnimateDragging(list)
     }
 
     private fun setStandardItemLayoutAndDivider(list: DragDropSwipeRecyclerView) {
@@ -53,6 +56,12 @@ class GridListFragment : BaseListFragment() {
 
         // In XML: app:divider="@null"
         list.dividerDrawableId = null
+    }
+
+    private fun setAnimateDragging(list: DragDropSwipeRecyclerView) {
+        list.dragAnimator =
+                if (currentListFragmentConfig.isUsingDragAnimations) DefaultDragAnimator()
+                else null
     }
 
     override fun setupLayoutBehindItemLayoutOnSwiping(list: DragDropSwipeRecyclerView) {
