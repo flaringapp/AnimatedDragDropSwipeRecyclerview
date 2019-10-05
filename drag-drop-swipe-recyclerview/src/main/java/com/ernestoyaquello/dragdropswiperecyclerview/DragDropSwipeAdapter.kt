@@ -421,7 +421,7 @@ abstract class DragDropSwipeAdapter<T, U : DragDropSwipeAdapter.ViewHolder>(
         notifyItemRangeInserted(mutableDataSet.size - items.size, items.size)
     }
 
-    fun addItems(items: List<T>, position: Int) {
+    fun insertItems(items: List<T>, position: Int) {
         if (items.isEmpty()) return
 
         mutableDataSet.addAll(position, items)
@@ -451,7 +451,7 @@ abstract class DragDropSwipeAdapter<T, U : DragDropSwipeAdapter.ViewHolder>(
             insertItem(newPosition, item)
     }
 
-    fun clear() {
+    fun clearItems() {
         val size = mutableDataSet.size
         if (size == 0) return
 
